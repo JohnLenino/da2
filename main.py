@@ -2,14 +2,15 @@ from flask import make_response
 
 from data.users import User
 from data import db_session
-from flask_login import LoginManager
-from flask import Flask, request, login_manager, render_template, redirect
-from flask_login import LoginForm, login_user
+from flask_login import LoginManager, login_user
+from forms.user import LoginForm
+from flask import Flask, request, render_template, redirect
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/blogs.db")
@@ -68,5 +69,4 @@ def login():
 if __name__ == '__main__':
     main()
     app.run(port=8080, host='127.0.0.1')
-    login_manager = LoginManager()
-    login_manager.init_app(app)
+
