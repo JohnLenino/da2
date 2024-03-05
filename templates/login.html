@@ -5,7 +5,7 @@
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            <input type="text" name="name" class="form-control" placeholder="{% if current_user.is_authenticated %}{{ current_user.name }}{% else %}<имя>{% endif %}">
+            <input type="text" name="name" class="form-control" value="{% if current_user.is_authenticated %}{{ current_user.name }}{% else %}<имя>{% endif %}">
         </p>
         <p>
             {{ form.email.label }}<br>
