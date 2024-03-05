@@ -14,7 +14,6 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/blogs.db")
-    db_sess = db_session.create_session()
     # user = User()
     # user.surname = 'Scott'
     # user.name = 'Ridley'
@@ -23,13 +22,43 @@ def main():
     # user.speciality = 'research engineer'
     # user.address = 'module_1'
     # user.email = 'scott_chief@mars.org'
+    # user.hashed_password = '123456'
     # db_sess = db_session.create_session()
     # db_sess.add(user)
-
+    #
+    # db_sess.commit()
+    #
+    # user = User()
+    # user.surname = 'aboba'
+    # user.name = 'bebrovich'
+    # user.age = 42
+    # user.position = 'moron'
+    # user.speciality = 'moron'
+    # user.address = 'module_2'
+    # user.email = 'moron@mars.org'
+    # user.hashed_password = 'cstyler'
+    # db_sess = db_session.create_session()
+    # db_sess.add(user)
+    #
+    # db_sess.commit()
+    #
+    # user = User()
+    # user.surname = 'e'
+    # user.name = 'a'
+    # user.age = 21
+    # user.position = 'servant'
+    # user.speciality = 'ggg'
+    # user.address = 'module_4'
+    # user.email = 'ggg@mars.org'
+    # user.hashed_password = 'kotiki'
+    # db_sess = db_session.create_session()
+    # db_sess.add(user)
+    #
     # db_sess.commit()
 
 
-@app.route("/cookie_test")
+
+@app.route("/")
 def cookie_test():
     visits_count = int(request.cookies.get("visits_count", 0))
     if visits_count:
@@ -59,7 +88,9 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            response = make_response(redirect("/"))
+            response.set_cookie('name', user.name, max_age=60 * 60 * 24)
+            return response
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)

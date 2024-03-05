@@ -1,12 +1,14 @@
-import datetime
+from data import db_session
 import sqlalchemy
 from sqlalchemy import orm
 
+from werkzeug.security import generate_password_hash, check_password_hash
 from .db_session import SqlAlchemyBase
 from flask_login import UserMixin
 
 
 class User(SqlAlchemyBase, UserMixin):
+
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -24,5 +26,11 @@ class User(SqlAlchemyBase, UserMixin):
 
     news = orm.relationship("News", back_populates='user')
 
+    def check_password(self, password):
+        print(self.hashed_password, password)
+        return True if self.hashed_password == password else False
+
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'
+
+
